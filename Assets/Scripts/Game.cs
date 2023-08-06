@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
@@ -12,94 +13,37 @@ using TextEditor = UnityEditor.UI.TextEditor;
 public class Game : MonoBehaviour
 {
     [SerializeField] private TMP_InputField textEditor;
-
+    [SerializeField] private GameObject errorMessage;
+    [SerializeField] private GameObject errorContainter;
     private string[] manth = new[]
     {
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
         "December"
     };
-
     private string[] rim = new[] { "I", "V", "X", "L", "C", "D", "M" };
     private string capcha;
-    public TextMeshProUGUI text;
+    private int last_right;
+    private List<ErrorBlock> errors;
     private void Start()
     {
+        errors = new List<ErrorBlock>();
         capcha = RandomCapcha();
-    
     }
 
     public void CheckPassword()
     {
-        bool checker = false;
-        string passwod = textEditor.text;
-        string check_result = null;
-        
+        string password = textEditor.text;        
         Debug.ClearDeveloperConsole();
-        if (passwod.Length < 5)
-        {
-            print("Должен содержать 5 символов");
-            checker = true;
-            check_result += "<color=red>Должен содержать 5 символов</color>\n";
-        } else { check_result += "<color=green>Должен содержать 5 символов</color>\n"; }
-        if (!passwod.Any(p => "123456789".Contains(p)))
-        {
-            print("Должен содержать хотя бы 1 цифру");
-            checker = true;
-            check_result += "<color=red>Должен содержать хотя бы 1 цифру</color>\n";
-        } else { check_result += "<color=green>Должен содержать хотя бы 1 цифру</color>\n"; }
-        if (!passwod.Any(p => char.IsUpper(p)))
-        {
-            print("Должен содержать большую букву");
-            checker = true;
-            check_result += "<color=red>Должен содержать большую букву</color>\n";
-        } else { check_result += "<color=green>Должен содержать большую букву</color>\n"; }
-        if (!passwod.Any(p => !char.IsLetterOrDigit(p))) // Починил не рабочий метод на проверку спец. символа
-        {
-            print("Должен содержать специальный символ");
-            checker = true;
-            check_result += "<color=red>Должен содержать специальный символ</color>\n";
-        } else { check_result += "<color=green>Должен содержать специальный символ</color>\n"; }
-        if (passwod.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 35)
-        {
-            print("Сумма всех цифр должна быть равно 35");
-            checker = true;
-            check_result += "<color=red>Сумма всех цифр должна быть равно 35</color>\n";
-        } else { check_result += "<color=green>Сумма всех цифр должна быть равно 35</color>\n"; }
-        if (triple_check(passwod))
-        {
-            print("Не должен содержать три подряд одинаковых числа");
-            checker = true;
-            check_result += "<color=red>Не должен содержать три подряд одинаковых числа</color>\n";
-        } else { check_result += "<color=green>Не должен содержать три подряд одинаковых числа</color>\n"; }
-        if (!manth.Any(m => passwod.Contains(m)))
-        {
-            print("Должен содержать месяц года");
-            checker = true;
-            check_result += "<color=red>Должен содержать месяц года</color>\n";
-        } else { check_result += "<color=green>Должен содержать месяц года</color>\n"; }
-        if (!rim.Any(r => passwod.Contains(r)))
-        {
-            print("Должен содержать римскую цифру");
-            checker = true;
-            check_result += "<color=red>Должен содержать римскую цифру</color>\n";
-        } else { check_result += "<color=green>Должен содержать римскую цифру</color>\n"; }
-        if (!passwod.Contains(capcha))
-        {
-            print($"Должен содержать нашу капчу: \"{capcha}\"");
-            checker = true;
-            check_result += $"<color=red>Должен содержать нашу капчу: \"{capcha}\"</color>\n";
-        } else { check_result += $"<color=green>Должен содержать нашу капчу: \"{capcha}\"</color>\n"; }
-        if (!passwod.Contains(DateTime.Now.Day.ToString()))
-        {
-            print("Должен содержать сегоднишни день");
-            checker = true;
-            check_result += "<color=red>Должен содержать сегоднишни день</color>\n";
-        } else { check_result += "<color=green>Должен содержать сегоднишни день</color>\n"; }
-        if (checker == false)
-        {
-            print("Хороший пароль");
-        }
-        text.text = check_result;
+        Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5);
+        Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p)));
+        Write_Text("В пароле должна быть заглавная буква.", 2, !password.Any(p => char.IsUpper(p)));
+        Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));
+        Write_Text("В пароле сумма цифр должна быть равна 35.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 35);
+        Write_Text("В пароле не должно быть трёх идущих подряд цифр.", 5, triple_check(password));
+        Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.Contains(m)));
+        Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
+        Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
+        Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
     }
 
     // ВСПОМОГАТЕЛЬНЫЙ МЕТОД ДЛЯ ПРОВЕРКИ ТРИ ИДУЩИХ ПОДРЯД ЧИСЛА
@@ -128,4 +72,45 @@ public class Game : MonoBehaviour
         stringChars[random.Next(0, 4)] = chars[^random.Next(1, 8)]; // гарантированное число
         return new String(stringChars);
     }
+    
+    private void Write_Text(string text, int index, bool is_error = false)
+    {
+        if (errors.Count == 0 || (errors.All(p => !p.IsError) && errors.Count == index))
+        {
+            var inst = Instantiate(errorMessage, errorContainter.transform);
+            inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            var errorObject = new ErrorBlock(inst);
+            errorObject.SetError(is_error);
+            errors.Add(errorObject);
+        }
+        if (index < errors.Count)
+        {
+            errors[index].SetError(is_error);
+            if (is_error)
+            {
+                errors[index].Prefab.transform.SetAsFirstSibling();
+            }
+            else
+            {
+                errors[index].Prefab.transform.SetAsLastSibling();
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+/*
+
+       
+       
+       
+        if (checker == false)
+        {
+            print("Хороший пароль");
+        }
+        text.text = check_result;*/
