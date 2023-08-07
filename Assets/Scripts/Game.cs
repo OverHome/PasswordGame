@@ -15,6 +15,7 @@ public class Game : MonoBehaviour
     [SerializeField] private TMP_InputField textEditor;
     [SerializeField] private GameObject errorMessage;
     [SerializeField] private GameObject errorContainter;
+    [SerializeField] private ScrollRect scrollRect;
     private string[] manth = new[]
     {
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
@@ -32,7 +33,12 @@ public class Game : MonoBehaviour
 
     public void CheckPassword()
     {
-        string password = textEditor.text;        
+        var ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
+        ApplyScrollPosition(scrollRect.transform.GetComponent<ScrollRect>(), 1f);
+        ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
+        string password = textEditor.text;
+        scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+        ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
         Debug.ClearDeveloperConsole();
         Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5);
         Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p)));
@@ -44,6 +50,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
+        scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
     }
 
     // ВСПОМОГАТЕЛЬНЫЙ МЕТОД ДЛЯ ПРОВЕРКИ ТРИ ИДУЩИХ ПОДРЯД ЧИСЛА
@@ -95,6 +102,12 @@ public class Game : MonoBehaviour
                 errors[index].Prefab.transform.SetAsLastSibling();
             }
         }
+    }
+    IEnumerator ApplyScrollPosition(ScrollRect sr, float verticalPos)
+    {
+        yield return new WaitForEndOfFrame();
+        sr.verticalNormalizedPosition = verticalPos;
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)sr.transform);
     }
 }
 
