@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
-using TextEditor = UnityEditor.UI.TextEditor;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class Game : MonoBehaviour
 {
@@ -16,6 +14,9 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject errorMessage;
     [SerializeField] private GameObject errorContainter;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject mainGame;
+    [SerializeField] private GameObject Container;
     private string[] manth = new[]
     {
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
@@ -33,28 +34,23 @@ public class Game : MonoBehaviour
 
     public void CheckPassword()
     {
-        var ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
-        ApplyScrollPosition(scrollRect.transform.GetComponent<ScrollRect>(), 1f);
-        ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
         string password = textEditor.text;
-        scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
-        ver = scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition;
         Debug.ClearDeveloperConsole();
         Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5);
         Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p)));
         Write_Text("В пароле должна быть заглавная буква.", 2, !password.Any(p => char.IsUpper(p)));
         Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));
         Write_Text("В пароле сумма цифр должна быть равна 35.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 35);
-        Write_Text("В пароле не должно быть трёх идущих подряд цифр.", 5, triple_check(password));
+        Write_Text("В пароле не должно быть трёх идущих подряд символов.", 5, triple_check(password));
         Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.Contains(m)));
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
-        scrollRect.transform.GetComponent<ScrollRect>().verticalNormalizedPosition = 1;
+        IsWinning();
     }
 
-    // ВСПОМОГАТЕЛЬНЫЙ МЕТОД ДЛЯ ПРОВЕРКИ ТРИ ИДУЩИХ ПОДРЯД ЧИСЛА
-    private static bool triple_check(string password) 
+    // Вспомогательный метод для поиска трех подряд символов
+    private bool triple_check(string password) 
     {
         for (int i = 0; i < (password.Length - 2); i++)
         {
@@ -65,7 +61,7 @@ public class Game : MonoBehaviour
         }
         return false;
     }
-
+    // Метод генерации капчи с минимум одним числом
     private string RandomCapcha()
     {
         var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -79,7 +75,7 @@ public class Game : MonoBehaviour
         stringChars[random.Next(0, 4)] = chars[^random.Next(1, 8)]; // гарантированное число
         return new String(stringChars);
     }
-    
+    // Метод созданий и записи ошибок
     private void Write_Text(string text, int index, bool is_error = false)
     {
         if (errors.Count == 0 || (errors.All(p => !p.IsError) && errors.Count == index))
@@ -103,27 +99,34 @@ public class Game : MonoBehaviour
             }
         }
     }
-    IEnumerator ApplyScrollPosition(ScrollRect sr, float verticalPos)
+    // Метод проверки победы
+    private void IsWinning()
     {
-        yield return new WaitForEndOfFrame();
-        sr.verticalNormalizedPosition = verticalPos;
-        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)sr.transform);
+        if(errors.All(e => !e.IsError))
+        {
+            print("No Errors!");
+            Time.timeScale = 0;
+            menu.SetActive(true);
+            mainGame.SetActive(false);
+        }
+    }
+    // Метод перезапуска игры
+    public void Restart()
+    {
+        textEditor.text = "";
+        errors.Clear();
+        capcha = RandomCapcha();
+        menu.SetActive(false);
+        mainGame.SetActive(true);
+        Delete(Container);
+        Time.timeScale = 1f;
+    }
+    // Метод удаления объектов из объекта
+    public void Delete(GameObject Container)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            Destroy(Container.transform.GetChild(i).gameObject);
+        }
     }
 }
-
-
-
-
-
-
-
-/*
-
-       
-       
-       
-        if (checker == false)
-        {
-            print("Хороший пароль");
-        }
-        text.text = check_result;*/
