@@ -105,13 +105,13 @@ public class Game : MonoBehaviour
         if(errors.All(e => !e.IsError))
         {
             print("No Errors!");
-            Time.timeScale = 0;
+            Time.timeScale = 0f;
             menu.SetActive(true);
             mainGame.SetActive(false);
         }
     }
     // Метод перезапуска игры
-    public void Restart()
+    private void Restart()
     {
         textEditor.text = "";
         errors.Clear();
@@ -119,10 +119,10 @@ public class Game : MonoBehaviour
         menu.SetActive(false);
         mainGame.SetActive(true);
         Delete(Container);
-        Time.timeScale = 1f;
+        Time.timeScale = 0.1f;
     }
     // Метод удаления объектов из объекта
-    public void Delete(GameObject Container)
+    private void Delete(GameObject Container)
     {
         for(int i = 0; i < 10; i++)
         {

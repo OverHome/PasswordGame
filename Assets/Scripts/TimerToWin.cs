@@ -19,6 +19,12 @@ public class Timer : MonoBehaviour
     {
         if (timerRunning)
         {
+            if(Time.timeScale == 0.1f)
+            {
+                timeStart = 0;
+                text.text = "";
+                Time.timeScale = 1f;
+            }
             timeStart += Time.deltaTime;
             text.text = timeStart.ToString("F2");
         }
@@ -26,5 +32,7 @@ public class Timer : MonoBehaviour
     public void ChangeRunning()
     {
         timerRunning = !timerRunning;
+        timeStart = 0f;
+        text.text = "";
     }
 }
