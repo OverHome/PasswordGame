@@ -389,10 +389,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1128647210}
   - {fileID: 639157124}
   - {fileID: 1495211984}
   - {fileID: 400920425}
-  - {fileID: 1128647210}
   m_Father: {fileID: 1096121444}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1187,11 +1187,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   textEditor: {fileID: 639157125}
   errorMessage: {fileID: 14382286230958329, guid: 05dc8a82d8ae1f842aa7006d87620fd8, type: 3}
+  errorMessageIMG: {fileID: 14382286230958329, guid: 3a89342f5daf7864fa1018e461a58747, type: 3}
   errorContainter: {fileID: 400732726}
   scrollRect: {fileID: 108945536}
   menu: {fileID: 988760004}
   mainGame: {fileID: 420422362}
   Container: {fileID: 400732726}
+  sprite:
+  - {fileID: 21300000, guid: f46fe21eb1ba3a44892418e8f86693ce, type: 3}
+  - {fileID: 21300000, guid: f1c54be151e06c04cb098a5c4b459f20, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
   m_ObjectHideFlags: 0

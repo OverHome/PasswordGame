@@ -7,16 +7,19 @@ using UnityEngine.UI;
 using Random = System.Random;
 using UnityEngine.SceneManagement;
 using UnityEditor;
+using Unity.VisualScripting;
 
 public class Game : MonoBehaviour
 {
     [SerializeField] private TMP_InputField textEditor;
     [SerializeField] private GameObject errorMessage;
+    [SerializeField] private GameObject errorMessageIMG;
     [SerializeField] private GameObject errorContainter;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private GameObject menu;
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
+    [SerializeField] private Sprite[] sprite;
     private string[] manth = new[]
     {
         "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
@@ -24,7 +27,6 @@ public class Game : MonoBehaviour
     };
     private string[] rim = new[] { "I", "V", "X", "L", "C", "D", "M" };
     private string capcha;
-    private int last_right;
     private List<ErrorBlock> errors;
     private void Start()
     {
@@ -46,6 +48,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
+        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, true);
         IsWinning();
     }
 
@@ -80,11 +83,26 @@ public class Game : MonoBehaviour
     {
         if (errors.Count == 0 || (errors.All(p => !p.IsError) && errors.Count == index))
         {
-            var inst = Instantiate(errorMessage, errorContainter.transform);
-            inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
-            var errorObject = new ErrorBlock(inst);
-            errorObject.SetError(is_error);
-            errors.Add(errorObject);
+            if (index != 10)
+            {
+                // для вариантов без него
+                var inst = Instantiate(errorMessage, errorContainter.transform);
+                inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
+                var errorObject = new ErrorBlock(inst);
+                errorObject.SetError(is_error);
+                errors.Add(errorObject);
+            }
+            else if (index == 10)
+            {
+                // для вариантов с изображанием
+                var random = new Random();
+                GameObject inst = Instantiate(errorMessageIMG, errorContainter.transform);
+                inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
+                inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = sprite[random.Next(sprite.Length)];
+                var errorObject = new ErrorBlock(inst);
+                errorObject.SetError(is_error);
+                errors.Add(errorObject);
+            }
         }
         if (index < errors.Count)
         {
