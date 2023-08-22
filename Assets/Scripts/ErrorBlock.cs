@@ -8,6 +8,7 @@ class ErrorBlock
     public GameObject Prefab { get; set; }
     public bool IsError { get; set; }
     private TextMeshProUGUI text;
+    private string code = "";
 
     public ErrorBlock(GameObject prefab)
     {
@@ -19,5 +20,13 @@ class ErrorBlock
     {
         IsError = isError;
         text.color = isError ? Color.red : Color.green;
+    }
+    public string GetCode()
+    {
+        return code;
+    }
+    public void SetCode(string Code)
+    {
+        code = Code;
     }
 }

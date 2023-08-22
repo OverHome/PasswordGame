@@ -48,7 +48,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
-        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, true);
+        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, IMGCheck(password,10));
         IsWinning();
     }
 
@@ -78,6 +78,18 @@ public class Game : MonoBehaviour
         stringChars[random.Next(0, 4)] = chars[^random.Next(1, 8)]; // гарантированное число
         return new String(stringChars);
     }
+    // Метод для проверки капч и т.д. с изображений
+    private bool IMGCheck(string password, int index)
+    {
+        if (errors.Count >= index+1 && password.Contains(errors[index].GetCode()))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
     // Метод созданий и записи ошибок
     private void Write_Text(string text, int index, bool is_error = false)
     {
@@ -98,9 +110,12 @@ public class Game : MonoBehaviour
                 var random = new Random();
                 GameObject inst = Instantiate(errorMessageIMG, errorContainter.transform);
                 inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
-                inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = sprite[random.Next(sprite.Length)];
+                var codeInImage = sprite[random.Next(sprite.Length)];
+                inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
                 var errorObject = new ErrorBlock(inst);
                 errorObject.SetError(is_error);
+                string str = codeInImage.ToString();
+                errorObject.SetCode(str.Remove(str.Length - 21));
                 errors.Add(errorObject);
             }
         }
