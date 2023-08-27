@@ -12,8 +12,7 @@ using Unity.VisualScripting;
 public class Game : MonoBehaviour
 {
     [SerializeField] private TMP_InputField textEditor;
-    [SerializeField] private GameObject errorMessage;
-    [SerializeField] private GameObject errorMessageIMG;
+    [SerializeField] private GameObject errorPanel;
     [SerializeField] private GameObject errorContainter;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private GameObject menu;
@@ -48,7 +47,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
-        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, IMGCheck(password,10));
+        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, IMGCheck(password,10), true);
         IsWinning();
     }
 
@@ -91,33 +90,32 @@ public class Game : MonoBehaviour
         }
     }
     // Метод созданий и записи ошибок
-    private void Write_Text(string text, int index, bool is_error = false)
+    private void Write_Text(string text, int index, bool is_error = false, bool NeedButton = false)
     {
         if (errors.Count == 0 || (errors.All(p => !p.IsError) && errors.Count == index))
         {
-            if (index != 10)
+            var inst = Instantiate(errorPanel, errorContainter.transform);
+            Sprite codeInImage = null;
+            inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            if (NeedButton)
             {
-                // для вариантов без изображения
-                var inst = Instantiate(errorMessage, errorContainter.transform);
-                inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
-                var errorObject = new ErrorBlock(inst);
-                errorObject.SetError(is_error);
-                errors.Add(errorObject);
+                inst.GetComponent<ChangeSize>().changeSizeTextWithButton();
+                inst.transform.GetChild(1).GameObject().SetActive(true);
+                if(index == 10)
+                {
+                    var random = new Random();
+                    codeInImage = sprite[random.Next(sprite.Length)];
+                    inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
+                }
             }
-            else if (index == 10)
+            var errorObject = new ErrorBlock(inst);
+            errorObject.SetError(is_error);
+            if(codeInImage != null)
             {
-                // для вариантов с изображанием
-                var random = new Random();
-                GameObject inst = Instantiate(errorMessageIMG, errorContainter.transform);
-                inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
-                var codeInImage = sprite[random.Next(sprite.Length)];
-                inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
-                var errorObject = new ErrorBlock(inst);
-                errorObject.SetError(is_error);
                 string str = codeInImage.ToString();
                 errorObject.SetCode(str.Remove(str.Length - 21));
-                errors.Add(errorObject);
             }
+            errors.Add(errorObject);
         }
         if (index < errors.Count)
         {

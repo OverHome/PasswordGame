@@ -1186,8 +1186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textEditor: {fileID: 639157125}
-  errorMessage: {fileID: 14382286230958329, guid: 05dc8a82d8ae1f842aa7006d87620fd8, type: 3}
-  errorMessageIMG: {fileID: 14382286230958329, guid: 3a89342f5daf7864fa1018e461a58747, type: 3}
+  errorPanel: {fileID: 14382286230958329, guid: 3a89342f5daf7864fa1018e461a58747, type: 3}
   errorContainter: {fileID: 400732726}
   scrollRect: {fileID: 108945536}
   menu: {fileID: 988760004}
@@ -1196,6 +1195,7 @@ MonoBehaviour:
   sprite:
   - {fileID: 21300000, guid: c4b4e835a31942f4193a15182fc428c2, type: 3}
   - {fileID: 21300000, guid: 172dd9ba44e7f4448ae240e2285a1cf3, type: 3}
+  - {fileID: 21300000, guid: c0fae5c60c769a2448af7af0be8a6f63, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
   m_ObjectHideFlags: 0
