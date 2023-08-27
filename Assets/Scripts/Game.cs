@@ -97,7 +97,7 @@ public class Game : MonoBehaviour
         {
             if (index != 10)
             {
-                // для вариантов без него
+                // для вариантов без изображения
                 var inst = Instantiate(errorMessage, errorContainter.transform);
                 inst.GetComponentInChildren<TextMeshProUGUI>().text = text;
                 var errorObject = new ErrorBlock(inst);
@@ -129,6 +129,11 @@ public class Game : MonoBehaviour
             else
             {
                 errors[index].Prefab.transform.SetAsLastSibling();
+                if(index == 10) // возврат панели с изображением к нормальному размеру
+                {
+                    errors[index].Prefab.GetComponent<ChangeSize>().changeSizeBack();
+                    errors[index].Prefab.transform.GetChild(2).GetComponentInChildren<Image>().GameObject().SetActive(false);
+                }
             }
         }
     }
