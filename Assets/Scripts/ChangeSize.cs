@@ -10,12 +10,12 @@ public class ChangeSize : MonoBehaviour
     public void changeSize()
     {
         RectTransform rectTransform = GameObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1150, 400f);
+        rectTransform.sizeDelta = new Vector2(1200f, 400f);
     }
     public void changeSizeBack()
     {
         RectTransform rectTransform = GameObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1150, 150f);
+        rectTransform.sizeDelta = new Vector2(1200f, 150f);
     }
     public void changeSizeTextWithButton()
     {
