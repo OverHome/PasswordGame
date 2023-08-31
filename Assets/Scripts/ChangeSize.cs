@@ -20,7 +20,7 @@ public class ChangeSize : MonoBehaviour
     public void changeSizeTextWithButton()
     {
         RectTransform rectTransform = Text.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(860f, 120f);
+        rectTransform.sizeDelta = new Vector2(900f, 120f);
     }
     public void changeSizeTextWithNOButton()
     {
