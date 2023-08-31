@@ -45,7 +45,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле не должно быть трёх идущих подряд символов.", 5, triple_check(password));
         Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.Contains(m)));
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
-        Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha));
+        Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha), true);
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
         Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, IMGCheck(password,10), true);
         IsWinning();
@@ -107,6 +107,10 @@ public class Game : MonoBehaviour
                     codeInImage = sprite[random.Next(sprite.Length)];
                     inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
                 }
+            }
+            else
+            {
+                inst.GetComponent<ChangeSize>().changeSizeTextWithNOButton();
             }
             var errorObject = new ErrorBlock(inst);
             errorObject.SetError(is_error);
