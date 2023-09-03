@@ -21,8 +21,8 @@ public class Game : MonoBehaviour
     [SerializeField] private Sprite[] sprite;
     private string[] manth = new[]
     {
-        "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
-        "December"
+        "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
+        "december"
     };
     private string[] rim = new[] { "I", "V", "X", "L", "C", "D", "M" };
     private string capcha;
@@ -43,12 +43,16 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));
         Write_Text("В пароле сумма цифр должна быть равна 35.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 35);
         Write_Text("В пароле не должно быть трёх идущих подряд символов.", 5, triple_check(password));
-        Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.Contains(m)));
+        Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.ToLower().Contains(m)));
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r)));
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha), true);
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
-        Write_Text("В пароле должна быть дополнительная капача с изображения: ", 10, IMGCheck(password,10), true);
-        IsWinning();
+        Write_Text("", 10, IMGCheck(password,10), true);
+        Write_Text("", 11, IMGCheck(password,11), true);
+        /*Write_Text("", 12, IMGCheck(password,12), true);
+        Write_Text("", 13, IMGCheck(password,13), true);
+        Write_Text("", 14, IMGCheck(password,14), true);
+        */IsWinning();
     }
 
     // Вспомогательный метод для поиска трех подряд символов
@@ -86,7 +90,7 @@ public class Game : MonoBehaviour
     // Метод для проверки капч и т.д. с изображений
     private bool IMGCheck(string password, int index)
     {
-        if (errors.Count >= index+1 && password.Contains(errors[index].GetCode()))
+        if (errors.Count >= index+1 && password.ToLower().Contains(errors[index].GetCode()))
         {
             return false;
         }
@@ -112,7 +116,7 @@ public class Game : MonoBehaviour
                     inst.GetComponentInChildren<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "Пересоздать капчу";
                     inst.GetComponentInChildren<Button>().onClick.AddListener(SetCapcha);
                 }
-                if(index == 10) // выбор рандомного спрайта
+                if(index >= 10) // выбор рандомного спрайта
                 {
                     inst.GetComponentInChildren<Button>().onClick.AddListener(inst.GetComponent<ChangeSize>().changeSize);
                     inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(2).GetComponent<Image>().GameObject().SetActive(true));
@@ -121,21 +125,24 @@ public class Game : MonoBehaviour
                     inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
                 }
             }
-            else
+            else // корректировка размера текста если кнопки НЕТ
             {
                 inst.GetComponent<ChangeSize>().changeSizeTextWithNOButton();
             }
+            // Общий для всех процесс добавления в массив ошибок
             var errorObject = new ErrorBlock(inst);
             errorObject.SetError(is_error);
-            if(codeInImage != null)
+            if(codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {
                 string str = codeInImage.ToString();
                 string[] QuestionAnswer = str.Split(" - ");
+                errorObject.Prefab.GetComponentInChildren<TextMeshProUGUI>().text = QuestionAnswer[0] + "?";
                 foreach(string q in QuestionAnswer)
                 {
                     print(q);
                 }
-                errorObject.SetCode(str.Remove(str.Length - 21));
+                errorObject.SetCode(QuestionAnswer[1].Remove(QuestionAnswer[1].Length - 21));
+                print(QuestionAnswer[1].Remove(QuestionAnswer[1].Length - 21));
             }
             errors.Add(errorObject);
         }
@@ -186,10 +193,5 @@ public class Game : MonoBehaviour
         {
             Destroy(Container.transform.GetChild(i).gameObject);
         }
-    }
-
-    private void ImageActive(GameObject inst)
-    {
-        inst.transform.GetChild(2).GameObject().SetActive(true);
     }
 }
