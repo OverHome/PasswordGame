@@ -19,18 +19,28 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
     [SerializeField] private Sprite[] sprite;
+
     private string[] manth = new[]
     {
         "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
         "december"
     };
+
+    private string[] random_words = new[]
+    {
+        "fox","wolf","rider","megamind","purple","building","bike","children","boys","girls","skibidi","camera","car","grass",
+        "lion","sky"
+    };
     private string[] rim = new[] { "I", "V", "X", "L", "C", "D", "M" };
     private string capcha;
+    private string notReverseWord;
+    private string reverseWord = "";
     private List<ErrorBlock> errors;
     private void Start()
     {
         errors = new List<ErrorBlock>();
         capcha = RandomCapcha();
+        ReverseWord();
     }
 
     public void CheckPassword()
@@ -48,13 +58,24 @@ public class Game : MonoBehaviour
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha), true);
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
         Write_Text("", 10, IMGCheck(password,10), true);
-        Write_Text("", 11, IMGCheck(password,11), true);
+        Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.Contains(reverseWord),false);
         /*Write_Text("", 12, IMGCheck(password,12), true);
         Write_Text("", 13, IMGCheck(password,13), true);
         Write_Text("", 14, IMGCheck(password,14), true);
         */IsWinning();
     }
 
+    // Метод создания слов в обратном порядке
+    private void ReverseWord()
+    {
+        Random rand = new Random();
+        notReverseWord = random_words[rand.Next(random_words.Length)];
+        for (int i = 0; i < notReverseWord.Length; i++)
+        {
+            reverseWord += notReverseWord[notReverseWord.Length - i - 1];
+        }
+        print(reverseWord + " " + reverseWord.Length);
+    }
     // Вспомогательный метод для поиска трех подряд символов
     private bool triple_check(string password) 
     {
@@ -116,12 +137,11 @@ public class Game : MonoBehaviour
                     inst.GetComponentInChildren<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "Пересоздать капчу";
                     inst.GetComponentInChildren<Button>().onClick.AddListener(SetCapcha);
                 }
-                if(index >= 10) // выбор рандомного спрайта
+                if(index == 10) // выбор рандомного спрайта
                 {
                     inst.GetComponentInChildren<Button>().onClick.AddListener(inst.GetComponent<ChangeSize>().changeSize);
                     inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(2).GetComponent<Image>().GameObject().SetActive(true));
-                    var random = new Random();
-                    codeInImage = sprite[random.Next(sprite.Length)];
+                    codeInImage = CreateCodeInImage();
                     inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
                 }
             }
@@ -163,6 +183,21 @@ public class Game : MonoBehaviour
                 }
             }
         }
+    }
+    // Метод проверки на повторяющееся изображение
+    private Sprite CreateCodeInImage()
+    {
+        Random random = new Random();
+        Sprite codeInImage = sprite[random.Next(sprite.Length)];
+        foreach (ErrorBlock i in errors)
+        {
+            if (i.Prefab.transform.GetChild(2).GameObject().GetComponent<Image>().sprite == codeInImage)
+            {
+                codeInImage = CreateCodeInImage();
+            }
+        }
+
+        return codeInImage;
     }
     // Метод проверки победы
     private void IsWinning()
