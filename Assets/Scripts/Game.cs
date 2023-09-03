@@ -77,6 +77,12 @@ public class Game : MonoBehaviour
         stringChars[random.Next(0, 4)] = chars[^random.Next(1, 8)]; // гарантированное число
         return new String(stringChars);
     }
+    // Вспомогательный метод для пересоздания капчи
+    private void SetCapcha()
+    {
+        capcha = RandomCapcha();
+        errors[8].Prefab.GetComponentInChildren<TextMeshProUGUI>().text = $"Должен содержать нашу капчу: \"{capcha}\"";
+    }
     // Метод для проверки капч и т.д. с изображений
     private bool IMGCheck(string password, int index)
     {
@@ -101,8 +107,15 @@ public class Game : MonoBehaviour
             {
                 inst.GetComponent<ChangeSize>().changeSizeTextWithButton();
                 inst.transform.GetChild(1).GameObject().SetActive(true);
-                if(index == 10)
+                if(index == 8) //Вариант при создании капчи и необходимости её перегенирировать
                 {
+                    inst.GetComponentInChildren<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "Пересоздать капчу";
+                    inst.GetComponentInChildren<Button>().onClick.AddListener(SetCapcha);
+                }
+                if(index == 10) // выбор рандомного спрайта
+                {
+                    inst.GetComponentInChildren<Button>().onClick.AddListener(inst.GetComponent<ChangeSize>().changeSize);
+                    inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(2).GetComponent<Image>().GameObject().SetActive(true));
                     var random = new Random();
                     codeInImage = sprite[random.Next(sprite.Length)];
                     inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
@@ -117,6 +130,11 @@ public class Game : MonoBehaviour
             if(codeInImage != null)
             {
                 string str = codeInImage.ToString();
+                string[] QuestionAnswer = str.Split(" - ");
+                foreach(string q in QuestionAnswer)
+                {
+                    print(q);
+                }
                 errorObject.SetCode(str.Remove(str.Length - 21));
             }
             errors.Add(errorObject);
@@ -131,7 +149,7 @@ public class Game : MonoBehaviour
             else
             {
                 errors[index].Prefab.transform.SetAsLastSibling();
-                if(index == 10) // возврат панели с изображением к нормальному размеру
+                if (index == 10) // возврат панели с изображением к нормальному размеру
                 {
                     errors[index].Prefab.GetComponent<ChangeSize>().changeSizeBack();
                     errors[index].Prefab.transform.GetChild(2).GetComponentInChildren<Image>().GameObject().SetActive(false);
@@ -168,5 +186,10 @@ public class Game : MonoBehaviour
         {
             Destroy(Container.transform.GetChild(i).gameObject);
         }
+    }
+
+    private void ImageActive(GameObject inst)
+    {
+        inst.transform.GetChild(2).GameObject().SetActive(true);
     }
 }

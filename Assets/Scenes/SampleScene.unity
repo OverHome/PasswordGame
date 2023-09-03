@@ -1269,9 +1269,9 @@ MonoBehaviour:
   mainGame: {fileID: 420422362}
   Container: {fileID: 400732726}
   sprite:
-  - {fileID: 21300000, guid: 075dd83e4d333c0469c912d99df012be, type: 3}
-  - {fileID: 21300000, guid: 8f46d7e2d03e6ab47a0615db34e67d93, type: 3}
-  - {fileID: 21300000, guid: c0fae5c60c769a2448af7af0be8a6f63, type: 3}
+  - {fileID: 21300000, guid: dbf1097e06604784b8ae23fb4d49a400, type: 3}
+  - {fileID: 21300000, guid: d436535e11647f246abff3936bb1bbb2, type: 3}
+  - {fileID: 21300000, guid: c0954f297e9369e4582d1b8ddd91184c, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
   m_ObjectHideFlags: 0
