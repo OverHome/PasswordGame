@@ -58,7 +58,7 @@ public class Game : MonoBehaviour
         Write_Text($"Должен содержать нашу капчу: \"{capcha}\"", 8, !password.Contains(capcha), true);
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString()));
         Write_Text("", 10, IMGCheck(password,10), true);
-        Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.Contains(reverseWord),false);
+        Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.ToLower().Contains(reverseWord),false);
         /*Write_Text("", 12, IMGCheck(password,12), true);
         Write_Text("", 13, IMGCheck(password,13), true);
         Write_Text("", 14, IMGCheck(password,14), true);
