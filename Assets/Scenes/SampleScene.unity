@@ -1270,7 +1270,7 @@ MonoBehaviour:
   Container: {fileID: 400732726}
   sprite:
   - {fileID: 21300000, guid: 35bbda0f6c28c244780a92ccfc0d560e, type: 3}
-  - {fileID: 21300000, guid: c444d0900c4c26342ad5d303b015fe4f, type: 3}
+  - {fileID: 21300000, guid: cef14c969373231469a07b27c3d98217, type: 3}
   - {fileID: 21300000, guid: c0954f297e9369e4582d1b8ddd91184c, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
