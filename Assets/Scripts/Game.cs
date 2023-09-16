@@ -19,6 +19,13 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
     [SerializeField] private Sprite[] sprite;
+    
+    // ЦВета
+    
+    [SerializeField] private Sprite[] makePassSprites;
+    [SerializeField] private Sprite[] inputFields;
+    [SerializeField] private Sprite[] trueOrFalse;
+    [SerializeField] private Sprite[] colorOfPanels;
 
     private string[] manth = new[]
     {
@@ -36,6 +43,7 @@ public class Game : MonoBehaviour
     private string notReverseWord;
     private string reverseWord = "";
     private List<ErrorBlock> errors;
+    private int shift;
     private void Start()
     {
         errors = new List<ErrorBlock>();
@@ -65,6 +73,25 @@ public class Game : MonoBehaviour
         */IsWinning();
     }
 
+    public void setShift(int shift)
+    {
+        this.shift = shift;
+    }
+
+    public int getShift()
+    {
+        return this.shift;
+    }
+
+    public Sprite[] getSpriteMakePass()
+    {
+        return makePassSprites;
+    }
+
+    public Sprite[] getInputFields()
+    {
+        return inputFields;
+    }
     // Метод создания слов в обратном порядке
     private void ReverseWord()
     {
@@ -141,6 +168,8 @@ public class Game : MonoBehaviour
                 {
                     inst.GetComponentInChildren<Button>().onClick.AddListener(inst.GetComponent<ChangeSize>().changeSize);
                     inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(2).GetComponent<Image>().GameObject().SetActive(true));
+                    inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(3).GameObject().SetActive(false));
+                    inst.GetComponentInChildren<Button>().onClick.AddListener(() => inst.transform.GetChild(4).GameObject().SetActive(false));
                     codeInImage = CreateCodeInImage();
                     inst.transform.GetChild(2).GameObject().GetComponent<Image>().sprite = codeInImage;
                 }
@@ -151,7 +180,7 @@ public class Game : MonoBehaviour
             }
             // Общий для всех процесс добавления в массив ошибок
             var errorObject = new ErrorBlock(inst);
-            errorObject.SetError(is_error);
+            errorObject.SetError(is_error, trueOrFalse, colorOfPanels,0);
             if(codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {
                 string str = codeInImage.ToString();
@@ -168,7 +197,7 @@ public class Game : MonoBehaviour
         }
         if (index < errors.Count)
         {
-            errors[index].SetError(is_error);
+            errors[index].SetError(is_error, trueOrFalse, colorOfPanels,0);
             if (is_error)
             {
                 errors[index].Prefab.transform.SetAsFirstSibling();

@@ -10,21 +10,21 @@ public class ChangeSize : MonoBehaviour
     public void changeSize()
     {
         RectTransform rectTransform = GameObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1200f, 400f);
+        rectTransform.sizeDelta = new Vector2(400f, 400f);
     }
     public void changeSizeBack()
     {
         RectTransform rectTransform = GameObject.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1200f, 150f);
+        rectTransform.sizeDelta = new Vector2(440f, 115f);
     }
     public void changeSizeTextWithButton()
     {
         RectTransform rectTransform = Text.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(900f, 120f);
+        rectTransform.sizeDelta = new Vector2(280f, 28f);
     }
     public void changeSizeTextWithNOButton()
     {
         RectTransform rectTransform = Text.GetComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1150f, 120f);
+        rectTransform.sizeDelta = new Vector2(400f, 28f);
     }
 }

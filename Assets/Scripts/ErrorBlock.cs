@@ -2,6 +2,8 @@ using Unity;
 using System;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 class ErrorBlock
 {
@@ -16,10 +18,16 @@ class ErrorBlock
         text = prefab.GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void SetError(bool isError)
+    public void SetError(bool isError, Sprite[] trueOrFalse, Sprite[] colorOfPanel, int shift)
     {
         IsError = isError;
         text.color = isError ? Color.red : Color.green;
+        var upperText = Prefab.transform.GetChild(4).GameObject().GetComponent<TextMeshProUGUI>();
+        upperText.text = isError ? "Условие не выполнено!" : "Условие выполнено!";
+        upperText.color = isError ? Color.red : Color.green;
+        Prefab.transform.GetChild(3).GameObject().GetComponent<Image>().sprite =
+            isError ? trueOrFalse[shift + 0] : trueOrFalse[shift + 1];
+        Prefab.GetComponent<Image>().sprite = isError ? colorOfPanel[shift + 0] : colorOfPanel[shift + 1];
     }
     public string GetCode()
     {
@@ -28,5 +36,10 @@ class ErrorBlock
     public void SetCode(string Code)
     {
         code = Code;
+    }
+
+    public void changeLightToDark()
+    {
+        
     }
 }
