@@ -5,7 +5,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
-class ErrorBlock
+public class ErrorBlock
 {
     public GameObject Prefab { get; set; }
     public bool IsError { get; set; }
@@ -36,10 +36,5 @@ class ErrorBlock
     public void SetCode(string Code)
     {
         code = Code;
-    }
-
-    public void changeLightToDark()
-    {
-        
     }
 }

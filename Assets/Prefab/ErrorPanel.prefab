@@ -320,7 +320,7 @@ GameObject:
   - component: {fileID: 7770018568984705644}
   - component: {fileID: 5970557086373362424}
   m_Layer: 4
-  m_Name: Image (1)
+  m_Name: JustLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

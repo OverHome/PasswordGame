@@ -81,6 +81,14 @@ public class Game : MonoBehaviour
         IsWinning();
     }
 
+    public Sprite[] getColorOfPanels()
+    {
+        return colorOfPanels;
+    }
+    public List<ErrorBlock> GetErrors()
+    {
+        return errors;
+    }
     public void setShift(int shift)
     {
         this.shift = shift;
@@ -188,7 +196,7 @@ public class Game : MonoBehaviour
             }
             // Общий для всех процесс добавления в массив ошибок
             var errorObject = new ErrorBlock(inst);
-            errorObject.SetError(is_error, trueOrFalse, colorOfPanels,0);
+            errorObject.SetError(is_error, trueOrFalse, colorOfPanels,shift);
             if(codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {
                 string str = codeInImage.ToString();
@@ -205,7 +213,7 @@ public class Game : MonoBehaviour
         }
         if (index < errors.Count)
         {
-            errors[index].SetError(is_error, trueOrFalse, colorOfPanels,0);
+            errors[index].SetError(is_error, trueOrFalse, colorOfPanels,shift);
             if (is_error)
             {
                 errors[index].Prefab.transform.SetAsFirstSibling();
