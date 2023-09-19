@@ -21,11 +21,12 @@ public class Game : MonoBehaviour
     [SerializeField] private Sprite[] sprite;
     
     // ЦВета
-    
     [SerializeField] private Sprite[] makePassSprites;
     [SerializeField] private Sprite[] inputFields;
     [SerializeField] private Sprite[] trueOrFalse;
     [SerializeField] private Sprite[] colorOfPanels;
+    [SerializeField] private Sprite[] reFreshButton;
+    [SerializeField] private Sprite[] slidersSprites;
 
     private string[] manth = new[]
     {
@@ -67,10 +68,6 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString())); // 9 
         Write_Text("", 10, IMGCheck(password,10), true); // 10
         Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.ToLower().Contains(reverseWord),false); // 11
-        /*Write_Text("", 12, IMGCheck(password,12), true);
-        Write_Text("", 13, IMGCheck(password,13), true);
-        Write_Text("", 14, IMGCheck(password,14), true);
-        */
         Write_Text("Размер пароля должен быть больше 40 символов", 12, !(password.Length <= 40)); // 13
         Write_Text("Напишите слово 'Да', если вы согласны что этот пароль хороший",13,!password.Contains("Да"));
         Write_Text("Для доказательства, что вы не робот - разгадайте загадку\nЦифра эта без очков, состоит из двух крючков",14, !password.Contains("3"));
@@ -81,6 +78,15 @@ public class Game : MonoBehaviour
         IsWinning();
     }
 
+    public Sprite[] getSliders()
+    {
+        return slidersSprites;
+    }
+
+    public Sprite[] getRefreshButton()
+    {
+        return reFreshButton;
+    }
     public Sprite[] getColorOfPanels()
     {
         return colorOfPanels;

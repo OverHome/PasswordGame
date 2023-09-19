@@ -22,6 +22,7 @@ public class LightToDark : MonoBehaviour
             shift += 2;
             mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift/2]; // замена текста
             mainGame.transform.GetChild(2).GetComponent<Image>().sprite = gameScript.getInputFields()[shift/2]; // замена поля ввода
+            mainGame.transform.GetChild(5).GetComponent<Image>().sprite = gameScript.getSliders()[shift / 2]; // замена кнопки смены цвета
             panel.GetComponent<Image>().color = new Color(21/255f,19/255f,21/255f,255);
             mainGame.transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
                 "<color=red>*</color><color=#FFFFFF>Обязательные условия</color>";
@@ -40,6 +41,7 @@ public class LightToDark : MonoBehaviour
             shift -= 2;
             mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift/2]; // замена текста
             mainGame.transform.GetChild(2).GetComponent<Image>().sprite = gameScript.getInputFields()[shift/2]; // замена поля ввода
+            mainGame.transform.GetChild(5).GetComponent<Image>().sprite = gameScript.getSliders()[shift / 2]; // замена кнопки смены цвета
             panel.GetComponent<Image>().color = new Color(255/255f,239/255f,224/255f,255);
             mainGame.transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
                 "<color=red>*</color><color=#000000>Обязательные условия</color>";

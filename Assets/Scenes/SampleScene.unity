@@ -237,8 +237,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 741, y: 490}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 772.12, y: 490}
+  m_SizeDelta: {x: 85, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &100662182
 MonoBehaviour:
@@ -316,8 +316,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 1862c6837852c9b49a56d82c694aa99d, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 30
   m_Viewport: {fileID: 0}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Light/Dark
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -655,7 +655,7 @@ GameObject:
   - component: {fileID: 293672218}
   - component: {fileID: 293672217}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1730,6 +1730,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: eb03b5f81cb213443aa48beb63bc2942, type: 3}
   - {fileID: 21300000, guid: ba674b43ddc68454da0a1233b9c0d67b, type: 3}
   - {fileID: 21300000, guid: 77a5f4b28b914fb48b22394b6262d339, type: 3}
+  reFreshButton: []
+  slidersSprites:
+  - {fileID: 21300000, guid: 1862c6837852c9b49a56d82c694aa99d, type: 3}
+  - {fileID: 21300000, guid: fc7d6546b0821964db262ec572564654, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
   m_ObjectHideFlags: 0
