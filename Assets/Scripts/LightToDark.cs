@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +33,16 @@ public class LightToDark : MonoBehaviour
                 errors[i].Prefab.GetComponent<Image>().sprite = errors[i].IsError
                     ? gameScript.getColorOfPanels()[shift]
                     : gameScript.getColorOfPanels()[shift + 1];
+                if (gameScript.getRefreshButton()
+                    .Contains(errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite))
+                {
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite = gameScript.getRefreshButton()[shift / 2];
+                }
+                else
+                {
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite =
+                        gameScript.getIMGButtonSprite()[shift / 2];
+                }
             }
         }
         else if (shift == 2)
@@ -51,6 +62,16 @@ public class LightToDark : MonoBehaviour
                 errors[i].Prefab.GetComponent<Image>().sprite = errors[i].IsError
                     ? gameScript.getColorOfPanels()[shift]
                     : gameScript.getColorOfPanels()[shift + 1];
+                if (gameScript.getRefreshButton()
+                    .Contains(errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite))
+                {
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite = gameScript.getRefreshButton()[shift / 2];
+                }
+                else
+                {
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite =
+                        gameScript.getIMGButtonSprite()[shift / 2];
+                }
             }
         }
     }

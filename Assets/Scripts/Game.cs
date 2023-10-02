@@ -8,6 +8,7 @@ using Random = System.Random;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using Unity.VisualScripting;
+using UnityEngine.Serialization;
 
 public class Game : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject errorPanel;
     [SerializeField] private GameObject errorContainter;
     [SerializeField] private ScrollRect scrollRect;
-    [SerializeField] private GameObject menu;
+    [SerializeField] private GameObject winMenu;
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
     [SerializeField] private Sprite[] sprite;
@@ -27,7 +28,12 @@ public class Game : MonoBehaviour
     [SerializeField] private Sprite[] colorOfPanels;
     [SerializeField] private Sprite[] reFreshButton;
     [SerializeField] private Sprite[] slidersSprites;
-
+    [SerializeField] private Sprite[] imageButtonsSprites;
+    
+    // Цвета для меню
+    [SerializeField] private Sprite[] menuBackground;
+    [SerializeField] private Sprite[] buttonBackground;
+    
     private string[] manth = new[]
     {
         "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
@@ -60,7 +66,7 @@ public class Game : MonoBehaviour
         Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p))); // 2
         Write_Text("В пароле должна быть заглавная буква.", 2, !password.Any(p => char.IsUpper(p))); // 3
         Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));// 3
-        Write_Text("В пароле сумма цифр должна быть равна 40.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 40);
+        Write_Text("В пароле сумма цифр должна быть равна 45.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
         Write_Text("В пароле не должно быть трёх идущих подряд символов.", 5, triple_check(password));// 5
         Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.ToLower().Contains(m))); // 6 
         Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r))); // 7
@@ -78,6 +84,10 @@ public class Game : MonoBehaviour
         IsWinning();
     }
 
+    public Sprite[] getIMGButtonSprite()
+    {
+        return imageButtonsSprites;
+    }
     public Sprite[] getSliders()
     {
         return slidersSprites;
@@ -183,8 +193,8 @@ public class Game : MonoBehaviour
                 inst.transform.GetChild(1).GameObject().SetActive(true);
                 if(index == 8) //Вариант при создании капчи и необходимости её перегенирировать
                 {
-                    inst.GetComponentInChildren<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "Пересоздать капчу";
                     inst.GetComponentInChildren<Button>().onClick.AddListener(SetCapcha);
+                    inst.transform.GetChild(1).GetComponent<Image>().sprite = reFreshButton[shift/2];
                 }
                 if(index == 10) // выбор рандомного спрайта
                 {
@@ -257,8 +267,9 @@ public class Game : MonoBehaviour
         {
             print("No Errors!");
             Time.timeScale = 0f;
-            menu.SetActive(true);
             mainGame.SetActive(false);
+            ChangeColorWinMenu();
+            winMenu.SetActive(true);
         }
     }
     // Метод перезапуска игры
@@ -267,7 +278,7 @@ public class Game : MonoBehaviour
         textEditor.text = "";
         errors.Clear();
         capcha = RandomCapcha();
-        menu.SetActive(false);
+        winMenu.SetActive(false);
         mainGame.SetActive(true);
         Delete(Container);
         Time.timeScale = 0.1f;
@@ -279,5 +290,15 @@ public class Game : MonoBehaviour
         {
             Destroy(Container.transform.GetChild(i).gameObject);
         }
+    }
+
+    private void ChangeColorWinMenu() // 21 19 21
+    {
+        winMenu.GetComponent<Image>().sprite = menuBackground[shift / 2];
+        Color color;
+        color = shift == 2 ? new Color(21/255f,19/255f,21/255f) : new Color(194 / 255f, 173 / 255f, 194 / 255f);
+        winMenu.transform.GetChild(0).GetComponent<TextMeshProUGUI>().faceColor = color;
+        winMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>().faceColor = color;
+        winMenu.GetComponent<Button>().GetComponent<Image>().sprite = buttonBackground[shift/2];
     }
 }
