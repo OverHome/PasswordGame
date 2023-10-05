@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Button = UnityEngine.UIElements.Button;
 
 public class LightToDark : MonoBehaviour
 {
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject panel;
     [SerializeField] private GameObject canvas;
+    [SerializeField] private Sprite[] buttons;
     public void ChangeLightToDark()
     {
         var gameScript = canvas.GetComponent<Game>();
@@ -40,8 +43,8 @@ public class LightToDark : MonoBehaviour
                 }
                 else
                 {
-                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite =
-                        gameScript.getIMGButtonSprite()[shift / 2];
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite = gameScript.getIMGButtonSprite()[shift / 2];
+                    errors[i].Prefab.transform.GetChild(2).transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getIMGButtonSprite()[shift / 2];
                 }
             }
         }
@@ -69,8 +72,9 @@ public class LightToDark : MonoBehaviour
                 }
                 else
                 {
-                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite =
-                        gameScript.getIMGButtonSprite()[shift / 2];
+                    errors[i].Prefab.transform.GetChild(1).GetComponent<Image>().sprite = gameScript.getIMGButtonSprite()[shift / 2];
+                    errors[i].Prefab.transform.GetChild(2).transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getIMGButtonSprite()[shift / 2];
+
                 }
             }
         }
