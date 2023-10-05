@@ -1739,8 +1739,14 @@ MonoBehaviour:
   imageButtonsSprites:
   - {fileID: 21300000, guid: 2da9a53b2fc933a4eab80648198ffc96, type: 3}
   - {fileID: 21300000, guid: 640ecbc91b2d83a4eb4c44ab19155020, type: 3}
-  menuBackground: []
-  buttonBackground: []
+  menuBackground:
+  - {fileID: 21300000, guid: 36bc85b9908e2d44f8baa7174f11a8de, type: 3}
+  - {fileID: 21300000, guid: 9a5f602f959f31a4fb7127750335f835, type: 3}
+  - {fileID: 21300000, guid: f400de9b30a754a4eac0f5c2aef487ca, type: 3}
+  - {fileID: 21300000, guid: 0bff195637cc2b54493551be1e2e08c2, type: 3}
+  buttonBackground:
+  - {fileID: 21300000, guid: f1b2cd4c60d04fb4abd72dfb735d60a0, type: 3}
+  - {fileID: 21300000, guid: a20661f74e6742d4d96a63a07da878fa, type: 3}
 --- !u!114 &1096121446
 MonoBehaviour:
   m_ObjectHideFlags: 0

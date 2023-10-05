@@ -8,6 +8,7 @@ using Random = System.Random;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 using Unity.VisualScripting;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 public class Game : MonoBehaviour
@@ -63,7 +64,7 @@ public class Game : MonoBehaviour
         string password = textEditor.text;
         Debug.ClearDeveloperConsole();
         Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5); // 1
-        Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p))); // 2
+        /*Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p))); // 2
         Write_Text("В пароле должна быть заглавная буква.", 2, !password.Any(p => char.IsUpper(p))); // 3
         Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));// 3
         Write_Text("В пароле сумма цифр должна быть равна 45.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
@@ -80,7 +81,7 @@ public class Game : MonoBehaviour
         Write_Text("Столица России?",15,!password.ToLower().Contains("москва"));
         Write_Text("В каком году была создана игрушка Хаги Ваги?",16,!password.Contains("1984"));
         Write_Text("Введите ответ на загадку: Мышь считала дырки в сыре, три плюс два ровно?", 17, !password.Contains("5"));
-        Write_Text("Вы точно не машина? Введите текущий год.",18,!password.Contains(DateTime.Now.Year.ToString()));
+        */Write_Text("Вы точно не машина? Введите текущий год.",18,!password.Contains(DateTime.Now.Year.ToString()));
         IsWinning();
     }
 
@@ -267,7 +268,6 @@ public class Game : MonoBehaviour
         {
             print("No Errors!");
             Time.timeScale = 0f;
-            mainGame.SetActive(false);
             ChangeColorWinMenu();
             winMenu.SetActive(true);
         }
@@ -294,11 +294,11 @@ public class Game : MonoBehaviour
 
     private void ChangeColorWinMenu() // 21 19 21
     {
-        winMenu.GetComponent<Image>().sprite = menuBackground[shift / 2];
-        Color color;
-        color = shift == 2 ? new Color(21/255f,19/255f,21/255f) : new Color(194 / 255f, 173 / 255f, 194 / 255f);
-        winMenu.transform.GetChild(0).GetComponent<TextMeshProUGUI>().faceColor = color;
-        winMenu.transform.GetChild(1).GetComponent<TextMeshProUGUI>().faceColor = color;
-        winMenu.GetComponent<Button>().GetComponent<Image>().sprite = buttonBackground[shift/2];
+        winMenu.transform.GetChild(0).GetComponent<Image>().sprite = menuBackground[shift / 2];
+        Debug.Log(shift);
+        Color color = shift == 2 ? new Color(185/255f,167/255f,183/255f) : new Color(197 / 255f, 182 / 255f, 197 / 255f);
+        winMenu.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().faceColor = color;
+        winMenu.transform.GetChild(0).transform.GetChild(1).GetComponent<TextMeshProUGUI>().faceColor = color;
+        winMenu.transform.GetChild(0).transform.GetChild(2).GetComponent<Image>().sprite = buttonBackground[shift/2];
     }
 }
