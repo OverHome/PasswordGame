@@ -218,6 +218,8 @@ public class Game : MonoBehaviour
 
                 if (index == 10) // выбор рандомного спрайта
                 {
+                    inst.transform.GetChild(2).transform.GetChild(0).GetComponent<Image>().sprite =
+                        imageButtonsSprites[shift / 2];
                     inst.transform.GetChild(1).GetComponent<Image>().sprite = imageButtonsSprites[shift / 2];
                     inst.GetComponentInChildren<Button>().onClick
                         .AddListener(inst.GetComponent<ChangeSize>().changeSize);
