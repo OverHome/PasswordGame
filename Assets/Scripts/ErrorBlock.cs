@@ -21,12 +21,18 @@ public class ErrorBlock
     }
 
     public int Index{ get => index;}
-    public void SetError(bool isError, Sprite[] trueOrFalse, Sprite[] colorOfPanel, int shift)
+    public void SetError(bool isError, Sprite[] trueOrFalse, Sprite[] colorOfPanel, int shift, int langShift)
     {
         IsError = isError;
         text.color = isError ? Color.red : Color.green;
         var upperText = Prefab.transform.GetChild(4).GameObject().GetComponent<TextMeshProUGUI>();
-        upperText.text = isError ? "Условие не выполнено!" : "Условие выполнено!";
+        if (langShift == 2)
+        {
+            upperText.text = isError ? "Condition is not met" : "Condition is met";
+        }else if (langShift == 0)
+        {
+            upperText.text = isError ? "Условие не выполнено" : "Условие выполнено";
+        }
         upperText.color = isError ? Color.red : Color.green;
         Prefab.transform.GetChild(3).GameObject().GetComponent<Image>().sprite =
             isError ? trueOrFalse[shift + 0] : trueOrFalse[shift + 1];

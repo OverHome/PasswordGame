@@ -255,7 +255,7 @@ public class Game : MonoBehaviour
 
             // Общий для всех процесс добавления в массив ошибок
             var errorObject = new ErrorBlock(inst, index);
-            errorObject.SetError(is_error, trueOrFalse, colorOfPanels, shift);
+            errorObject.SetError(is_error, trueOrFalse, colorOfPanels, shift,langShift);
             if (codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {
                 string str = codeInImage.ToString();
@@ -275,7 +275,7 @@ public class Game : MonoBehaviour
 
         if (index < errors.Count)
         {
-            errors[index].SetError(is_error, trueOrFalse, colorOfPanels, shift);
+            errors[index].SetError(is_error, trueOrFalse, colorOfPanels, shift,langShift);
             if (is_error)
             {
                 errors[index].Prefab.transform.SetAsFirstSibling();
