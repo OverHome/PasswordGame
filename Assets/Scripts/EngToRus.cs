@@ -9,6 +9,7 @@ public class EngToRus : MonoBehaviour
 {
     [SerializeField] private GameObject canvas;
     [SerializeField] private GameObject mainMenu;
+    
 
     private Hashtable ruErrors = new Hashtable();
     private Hashtable engErrors = new Hashtable();
@@ -32,7 +33,7 @@ public class EngToRus : MonoBehaviour
         ruErrors.Add(5, "В пароле не должно быть трёх идущих подряд символов.");
         ruErrors.Add(6,"В пароле должен быть написан месяц на английском языке.");
         ruErrors.Add(7,"В пароле должна быть минимум одна римская цифра.");
-        ruErrors.Add(8,$"Должен содержать нашу капчу:\n\"{gameScript.Capcha}\"");
+        ruErrors.Add(8,"Должен содержать нашу капчу:");
         ruErrors.Add(9,"В пароле должно быть написано сегодняшнее число");
         ruErrors.Add(10, "Сколько здесь людей (ответ запишите цифровй)?");
         ruErrors.Add(11, $"Введите слово \"{gameScript.ReverseWordGet}\", написанное наоборот");
@@ -51,7 +52,7 @@ public class EngToRus : MonoBehaviour
         engErrors.Add(5, "The password must not contain three consecutive characters.");
         engErrors.Add(6,"The password must contain the month in English.");
         engErrors.Add(7,"The password must contain at least one Roman numeral.");
-        engErrors.Add(8,$"The password must contain our captcha:\n\"{gameScript.Capcha}\"");
+        engErrors.Add(8,"The password must contain our captcha:");
         engErrors.Add(9,"Today's date should be written in the password.");
         engErrors.Add(10, "How many people are here (write down the answer with a number)?");
         engErrors.Add(11, $"Enter word \"{gameScript.ReverseWordGet}\", written in reverse.");
@@ -66,6 +67,7 @@ public class EngToRus : MonoBehaviour
     public void Translate()
     {
         var gameScript = canvas.GetComponent<Game>();
+        List<ErrorBlock> errors = gameScript.GetErrors();
         int langShift = gameScript.LangShift;
         int shift = gameScript.getShift();
         if (langShift == 0) // ru ---> eng
@@ -78,6 +80,13 @@ public class EngToRus : MonoBehaviour
             mainMenu.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>().text = shift == 2
                 ? "<color=red>*</color><color=#FFFFFF>Essential conditions</color>"
                 : "<color=red>*</color><color=#000000>Essential conditions</color>";
+            for (int i = 0; i < errors.Count; i++)
+            {
+                errors[i].Prefab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                    (string)engErrors[errors[i].Index];
+                errors[i].Prefab.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text =
+                    errors[i].IsError ? "Condition is not met" : "Condition is met";
+            }
             gameScript.LangShift = langShift;
         }
         else if (langShift == 2) // eng ---> ru
@@ -90,6 +99,13 @@ public class EngToRus : MonoBehaviour
             mainMenu.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>().text = shift == 2
                 ? "<color=red>*</color><color=#FFFFFF>Обязательные условия</color>"
                 : "<color=red>*</color><color=#000000>Обязательные условия</color>";
+            for (int i = 0; i < errors.Count; i++)
+            {
+                errors[i].Prefab.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                    (string)ruErrors[errors[i].Index];
+                errors[i].Prefab.transform.GetChild(4).GetComponent<TextMeshProUGUI>().text =
+                    errors[i].IsError ? "Условие не выполнено" : "Условие выполнено";
+            }
             gameScript.LangShift = langShift;
         }
     }

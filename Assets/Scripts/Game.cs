@@ -53,12 +53,13 @@ public class Game : MonoBehaviour
     private string capcha;
     private string notReverseWord;
     private string reverseWord = "";
-    private List<ErrorBlock> errors;
+    private List<ErrorBlock> errors = new List<ErrorBlock>();
     private int shift;
-    private int langShift = 0; // 0 - ru, 2 - eng
+    private int langShift = 0; // 0 - ru, 2 - eng Здесь задаётся изначальное значение. То есть параметр пользователя из браузера(не уверен, что из браузера)
     private void Start()
     {
-        errors = new List<ErrorBlock>();
+        langShift = langShift == 2 ? langShift = 0 : langShift = 2; 
+        buttonWithTranslate.GetComponent<EngToRus>().Translate();
         capcha = RandomCapcha();
         ReverseWord();
         buttonWithTranslate.GetComponent<EngToRus>().makeHash();
@@ -71,25 +72,25 @@ public class Game : MonoBehaviour
             ? buttonWithTranslate.GetComponent<EngToRus>().EngErrors
             : buttonWithTranslate.GetComponent<EngToRus>().RuErrors;
         Debug.ClearDeveloperConsole();
-        Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5); // 1
-        Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p))); // 2
-        Write_Text("В пароле должна быть заглавная буква.", 2, !password.Any(p => char.IsUpper(p))); // 3
-        Write_Text("В пароле должна быть специальный символ (!,~,#,$,%,^,&,*).", 3, !password.Any(p => !char.IsLetterOrDigit(p)));// 3
-        Write_Text("В пароле сумма цифр должна быть равна 45.", 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
-        Write_Text("В пароле не должно быть трёх идущих подряд символов.", 5, triple_check(password));// 5
-        Write_Text("В пароле должен быть написан месяц на английском языке.", 6, !manth.Any(m => password.ToLower().Contains(m))); // 6
-        Write_Text("В пароле должна быть минимум одна римская цифра.", 7, !rim.Any(r => password.Contains(r))); // 7
-        Write_Text($"Должен содержать нашу капчу:\n\"{capcha}\"", 8, !password.Contains(capcha), true); // 8
-        Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString())); // 9
-        Write_Text("", 10, IMGCheck(password,10), true); // 10
-        Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.ToLower().Contains(reverseWord),false); // 11
-        Write_Text("Размер пароля должен быть больше 40 символов", 12, !(password.Length <= 40)); // 13
-        Write_Text("Напишите слово 'Да', если вы согласны что этот пароль хороший",13,!password.Contains("Да") || !password.Contains("Yes"));
-        Write_Text("Для доказательства, что вы не робот - разгадайте загадку\nЦифра эта без очков, состоит из двух крючков",14, !password.Contains("3"));
-        Write_Text("Столица России?",15,!password.ToLower().Contains("москва") || !password.ToLower().Contains("Moscow"));
-        Write_Text("В каком году была создана игрушка Хаги Ваги?",16,!password.Contains("1984"));
-        Write_Text("Введите ответ на загадку: Мышь считала дырки в сыре, три плюс два ровно?", 17, !password.Contains("5"));
-        Write_Text("Вы точно не машина? Введите текущий год.", 18, !password.Contains(DateTime.Now.Year.ToString()));
+        Write_Text((string)currentHash[0], 0, password.Length < 5); // 1
+        Write_Text((string)currentHash[1], 1, !password.Any(p => "1234567890".Contains(p))); // 2
+        Write_Text((string)currentHash[2], 2, !password.Any(p => char.IsUpper(p))); // 3
+        Write_Text((string)currentHash[3], 3, !password.Any(p => !char.IsLetterOrDigit(p)));// 3
+        Write_Text((string)currentHash[4], 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
+        Write_Text((string)currentHash[5], 5, triple_check(password));// 5
+        Write_Text((string)currentHash[6], 6, !manth.Any(m => password.ToLower().Contains(m))); // 6
+        Write_Text((string)currentHash[7], 7, !rim.Any(r => password.Contains(r))); // 7
+        Write_Text((string)currentHash[8] + capcha, 8, !password.Contains(capcha), true); // 8
+        Write_Text((string)currentHash[9], 9, !password.Contains(DateTime.Now.Day.ToString())); // 9
+        Write_Text((string)currentHash[10], 10, IMGCheck(password,10), true); // 10
+        Write_Text((string)currentHash[11],11,!password.ToLower().Contains(reverseWord),false); // 11
+        Write_Text((string)currentHash[12], 12, !(password.Length <= 40)); // 13
+        Write_Text((string)currentHash[13],13,!password.Contains("Да"));
+        Write_Text((string)currentHash[14],14, !password.Contains("3"));
+        Write_Text((string)currentHash[15],15,!password.ToLower().Contains("москва"));
+        Write_Text((string)currentHash[16],16,!password.Contains("1984"));
+        Write_Text((string)currentHash[17], 17, !password.Contains("5"));
+        Write_Text((string)currentHash[18], 18, !password.Contains(DateTime.Now.Year.ToString()));
         IsWinning();
     }
 
@@ -138,11 +139,6 @@ public class Game : MonoBehaviour
     {
         get => langShift;
         set => langShift = value;
-    }
-
-    public void setLangShift()
-    {
-        
     }
     public Sprite[] getSpriteMakePass()
     {
@@ -258,7 +254,7 @@ public class Game : MonoBehaviour
             }
 
             // Общий для всех процесс добавления в массив ошибок
-            var errorObject = new ErrorBlock(inst);
+            var errorObject = new ErrorBlock(inst, index);
             errorObject.SetError(is_error, trueOrFalse, colorOfPanels, shift);
             if (codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {

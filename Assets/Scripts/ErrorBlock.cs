@@ -11,13 +11,16 @@ public class ErrorBlock
     public bool IsError { get; set; }
     private TextMeshProUGUI text;
     private string code = "";
-
-    public ErrorBlock(GameObject prefab)
+    private int index;
+    
+    public ErrorBlock(GameObject prefab, int new_index)
     {
         Prefab = prefab;
         text = prefab.GetComponentInChildren<TextMeshProUGUI>();
+        index = new_index;
     }
 
+    public int Index{ get => index;}
     public void SetError(bool isError, Sprite[] trueOrFalse, Sprite[] colorOfPanel, int shift)
     {
         IsError = isError;
