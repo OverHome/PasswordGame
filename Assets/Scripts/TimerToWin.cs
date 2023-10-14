@@ -26,7 +26,10 @@ public class Timer : MonoBehaviour
                 Time.timeScale = 1f;
             }
             timeStart += Time.deltaTime;
-            text.text = timeStart.ToString("F2");
+            var minute = (int)(timeStart / 60 % 60);
+            var hour = (int)(timeStart / 60 / 60 % 24);
+            var seconds = (int)(timeStart % 60);
+            text.text = hour.ToString("D2") + ":" + minute.ToString("D2") + ":" + seconds.ToString("D2");
         }
     }
     public void ChangeRunning()
