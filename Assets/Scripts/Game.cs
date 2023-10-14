@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -21,7 +22,6 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
     [SerializeField] private Sprite[] sprite;
-
     // ЦВета
     [SerializeField] private Sprite[] makePassSprites;
     [SerializeField] private Sprite[] inputFields;
@@ -34,7 +34,8 @@ public class Game : MonoBehaviour
     // Цвета для меню
     [SerializeField] private Sprite[] menuBackground;
     [SerializeField] private Sprite[] buttonBackground;
-
+    // Для других скриптов
+    [SerializeField] private GameObject buttonWithTranslate;
     private string[] manth = new[]
     {
         "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
@@ -54,17 +55,21 @@ public class Game : MonoBehaviour
     private string reverseWord = "";
     private List<ErrorBlock> errors;
     private int shift;
-
+    private int langShift = 0; // 0 - ru, 2 - eng
     private void Start()
     {
         errors = new List<ErrorBlock>();
         capcha = RandomCapcha();
         ReverseWord();
+        buttonWithTranslate.GetComponent<EngToRus>().makeHash();
     }
 
     public void CheckPassword()
     {
         string password = textEditor.text;
+        Hashtable currentHash = langShift == 2
+            ? buttonWithTranslate.GetComponent<EngToRus>().EngErrors
+            : buttonWithTranslate.GetComponent<EngToRus>().RuErrors;
         Debug.ClearDeveloperConsole();
         Write_Text("В пароле должно быть больше 5 символов.", 0, password.Length < 5); // 1
         Write_Text("В пароле должна быть хоть одна цифра.", 1, !password.Any(p => "1234567890".Contains(p))); // 2
@@ -77,19 +82,25 @@ public class Game : MonoBehaviour
         Write_Text($"Должен содержать нашу капчу:\n\"{capcha}\"", 8, !password.Contains(capcha), true); // 8
         Write_Text("В пароле должно быть написано сегодняшнее число", 9, !password.Contains(DateTime.Now.Day.ToString())); // 9
         Write_Text("", 10, IMGCheck(password,10), true); // 10
-        Write_Text("", 11, IMGCheck(password,10), true); // 10
-        Write_Text("", 12, IMGCheck(password,10), true); // 10
-        //Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.ToLower().Contains(reverseWord),false); // 11
-        //Write_Text("Размер пароля должен быть больше 40 символов", 12, !(password.Length <= 40)); // 13
-        Write_Text("Напишите слово 'Да', если вы согласны что этот пароль хороший",13,!password.Contains("Да"));
+        Write_Text($"Введите слово \"{notReverseWord}\", написанное наоборот",11,!password.ToLower().Contains(reverseWord),false); // 11
+        Write_Text("Размер пароля должен быть больше 40 символов", 12, !(password.Length <= 40)); // 13
+        Write_Text("Напишите слово 'Да', если вы согласны что этот пароль хороший",13,!password.Contains("Да") || !password.Contains("Yes"));
         Write_Text("Для доказательства, что вы не робот - разгадайте загадку\nЦифра эта без очков, состоит из двух крючков",14, !password.Contains("3"));
-        Write_Text("Столица России?",15,!password.ToLower().Contains("москва"));
+        Write_Text("Столица России?",15,!password.ToLower().Contains("москва") || !password.ToLower().Contains("Moscow"));
         Write_Text("В каком году была создана игрушка Хаги Ваги?",16,!password.Contains("1984"));
         Write_Text("Введите ответ на загадку: Мышь считала дырки в сыре, три плюс два ровно?", 17, !password.Contains("5"));
         Write_Text("Вы точно не машина? Введите текущий год.", 18, !password.Contains(DateTime.Now.Year.ToString()));
         IsWinning();
     }
 
+    public string ReverseWordGet
+    {
+        get => reverseWord;
+    }
+    public string Capcha
+    {
+        get => capcha;
+    }
     public Sprite[] getIMGButtonSprite()
     {
         return imageButtonsSprites;
@@ -114,7 +125,6 @@ public class Game : MonoBehaviour
     {
         return errors;
     }
-
     public void setShift(int shift)
     {
         this.shift = shift;
@@ -124,7 +134,16 @@ public class Game : MonoBehaviour
     {
         return this.shift;
     }
+    public int LangShift
+    {
+        get => langShift;
+        set => langShift = value;
+    }
 
+    public void setLangShift()
+    {
+        
+    }
     public Sprite[] getSpriteMakePass()
     {
         return makePassSprites;

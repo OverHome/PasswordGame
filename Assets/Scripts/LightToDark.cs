@@ -18,18 +18,26 @@ public class LightToDark : MonoBehaviour
     {
         var gameScript = canvas.GetComponent<Game>();
         int shift = gameScript.getShift();
+        int langShift = gameScript.LangShift;
         List<ErrorBlock> errors = gameScript.GetErrors();
         if (shift == 0)  // От светлой к тёмной
         {
             print("L-D");
             gameScript.setShift(2);
             shift += 2;
-            mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift/2]; // замена текста
+            mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift / 2 + langShift]; // замена текста
             mainGame.transform.GetChild(2).GetComponent<Image>().sprite = gameScript.getInputFields()[shift/2]; // замена поля ввода
             mainGame.transform.GetChild(5).GetComponent<Image>().sprite = gameScript.getSliders()[shift / 2]; // замена кнопки смены цвета
             panel.GetComponent<Image>().color = new Color(21/255f,19/255f,22/255f,255);
-            mainGame.transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
-                "<color=red>*</color><color=#FFFFFF>Обязательные условия</color>";
+            if (langShift == 2)
+            {
+                mainGame.transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                    "<color=red>*</color><color=#FFFFFF>Essential condition</color>";
+            } else if (langShift == 0)
+            {
+                mainGame.transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text =
+                    "<color=red>*</color><color=#FFFFFF>Обязательное условие</color>";
+            }
             mainGame.transform.GetChild(4).transform.GetChild(1).GetComponent<Image>().color = new Color(1, 1, 1, 255);
             for(int i =0; i < errors.Count; i++)
             {
@@ -53,7 +61,7 @@ public class LightToDark : MonoBehaviour
             print("D-L");
             gameScript.setShift(0);
             shift -= 2;
-            mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift/2]; // замена текста
+            mainGame.transform.GetChild(0).GetComponent<Image>().sprite = gameScript.getSpriteMakePass()[shift / 2 + langShift]; // замена текста
             mainGame.transform.GetChild(2).GetComponent<Image>().sprite = gameScript.getInputFields()[shift/2]; // замена поля ввода
             mainGame.transform.GetChild(5).GetComponent<Image>().sprite = gameScript.getSliders()[shift / 2]; // замена кнопки смены цвета
             panel.GetComponent<Image>().color = new Color(255/255f,239/255f,224/255f,255);
