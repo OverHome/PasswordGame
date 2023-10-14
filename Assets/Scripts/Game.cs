@@ -21,7 +21,9 @@ public class Game : MonoBehaviour
     [SerializeField] private GameObject winMenu;
     [SerializeField] private GameObject mainGame;
     [SerializeField] private GameObject Container;
+
     [SerializeField] private Sprite[] sprite;
+
     // ЦВета
     [SerializeField] private Sprite[] makePassSprites;
     [SerializeField] private Sprite[] inputFields;
@@ -33,9 +35,12 @@ public class Game : MonoBehaviour
 
     // Цвета для меню
     [SerializeField] private Sprite[] menuBackground;
+
     [SerializeField] private Sprite[] buttonBackground;
+
     // Для других скриптов
     [SerializeField] private GameObject buttonWithTranslate;
+
     private string[] manth = new[]
     {
         "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november",
@@ -55,10 +60,13 @@ public class Game : MonoBehaviour
     private string reverseWord = "";
     private List<ErrorBlock> errors = new List<ErrorBlock>();
     private int shift;
-    private int langShift = 0; // 0 - ru, 2 - eng Здесь задаётся изначальное значение. То есть параметр пользователя из браузера(не уверен, что из браузера)
+
+    private int
+        langShift = 2; // 0 - ru, 2 - eng Здесь задаётся изначальное значение. То есть параметр пользователя из браузера(не уверен, что из браузера)
+
     private void Start()
     {
-        langShift = langShift == 2 ? langShift = 0 : langShift = 2; 
+        langShift = langShift == 2 ? langShift = 0 : langShift = 2;
         buttonWithTranslate.GetComponent<EngToRus>().Translate();
         capcha = RandomCapcha();
         ReverseWord();
@@ -75,33 +83,36 @@ public class Game : MonoBehaviour
         Write_Text((string)currentHash[0], 0, password.Length < 5); // 1
         Write_Text((string)currentHash[1], 1, !password.Any(p => "1234567890".Contains(p))); // 2
         Write_Text((string)currentHash[2], 2, !password.Any(p => char.IsUpper(p))); // 3
-        Write_Text((string)currentHash[3], 3, !password.Any(p => !char.IsLetterOrDigit(p)));// 3
-        Write_Text((string)currentHash[4], 4, password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
-        Write_Text((string)currentHash[5], 5, triple_check(password));// 5
+        Write_Text((string)currentHash[3], 3, !password.Any(p => !char.IsLetterOrDigit(p))); // 3
+        Write_Text((string)currentHash[4], 4,
+            password.Sum(p => "123456789".Contains(p) ? Convert.ToInt16((Convert.ToString(p))) : 0) != 45);
+        Write_Text((string)currentHash[5], 5, triple_check(password)); // 5
         Write_Text((string)currentHash[6], 6, !manth.Any(m => password.ToLower().Contains(m))); // 6
         Write_Text((string)currentHash[7], 7, !rim.Any(r => password.Contains(r))); // 7
         Write_Text((string)currentHash[8] + capcha, 8, !password.Contains(capcha), true); // 8
         Write_Text((string)currentHash[9], 9, !password.Contains(DateTime.Now.Day.ToString())); // 9
-        Write_Text((string)currentHash[10], 10, IMGCheck(password,10), true); // 10
-        Write_Text((string)currentHash[11],11,!password.ToLower().Contains(reverseWord),false); // 11
+        Write_Text((string)currentHash[10], 10, IMGCheck(password, 10), true); // 10
+        Write_Text((string)currentHash[11], 11, !password.ToLower().Contains(reverseWord), false); // 11
         Write_Text((string)currentHash[12], 12, !(password.Length <= 40)); // 13
-        Write_Text((string)currentHash[13],13,!password.Contains("Да"));
-        Write_Text((string)currentHash[14],14, !password.Contains("3"));
-        Write_Text((string)currentHash[15],15,!password.ToLower().Contains("москва"));
-        Write_Text((string)currentHash[16],16,!password.Contains("1984"));
+        Write_Text((string)currentHash[13], 13, !password.Contains("Да"));
+        Write_Text((string)currentHash[14], 14, !password.Contains("3"));
+        Write_Text((string)currentHash[15], 15, !password.ToLower().Contains("москва"));
+        Write_Text((string)currentHash[16], 16, !password.Contains("1984"));
         Write_Text((string)currentHash[17], 17, !password.Contains("5"));
         Write_Text((string)currentHash[18], 18, !password.Contains(DateTime.Now.Year.ToString()));
         IsWinning();
     }
 
-    public string ReverseWordGet
+    public string NotReverseWordGet
     {
-        get => reverseWord;
+        get => notReverseWord;
     }
+
     public string Capcha
     {
         get => capcha;
     }
+
     public Sprite[] getIMGButtonSprite()
     {
         return imageButtonsSprites;
@@ -126,6 +137,7 @@ public class Game : MonoBehaviour
     {
         return errors;
     }
+
     public void setShift(int shift)
     {
         this.shift = shift;
@@ -135,11 +147,13 @@ public class Game : MonoBehaviour
     {
         return this.shift;
     }
+
     public int LangShift
     {
         get => langShift;
         set => langShift = value;
     }
+
     public Sprite[] getSpriteMakePass()
     {
         return makePassSprites;
@@ -255,7 +269,7 @@ public class Game : MonoBehaviour
 
             // Общий для всех процесс добавления в массив ошибок
             var errorObject = new ErrorBlock(inst, index);
-            errorObject.SetError(is_error, trueOrFalse, colorOfPanels, shift,langShift);
+            errorObject.SetError(is_error, trueOrFalse, colorOfPanels, shift, langShift);
             if (codeInImage != null) // изменение текста и ответа на ошибку если есть изобраджение
             {
                 string str = codeInImage.ToString();
@@ -275,7 +289,7 @@ public class Game : MonoBehaviour
 
         if (index < errors.Count)
         {
-            errors[index].SetError(is_error, trueOrFalse, colorOfPanels, shift,langShift);
+            errors[index].SetError(is_error, trueOrFalse, colorOfPanels, shift, langShift);
             if (is_error)
             {
                 errors[index].Prefab.transform.SetAsFirstSibling();
@@ -344,13 +358,18 @@ public class Game : MonoBehaviour
 
     private void ChangeColorWinMenu() // 21 19 21
     {
-        winMenu.transform.GetChild(0).GetComponent<Image>().sprite = menuBackground[shift / 2];
+        winMenu.transform.GetChild(0).GetComponent<Image>().sprite = menuBackground[shift / 2 + langShift];
         Debug.Log(shift);
         Color color = shift == 2
             ? new Color(185 / 255f, 167 / 255f, 183 / 255f)
             : new Color(197 / 255f, 182 / 255f, 197 / 255f);
         winMenu.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().faceColor = color;
+        winMenu.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = langShift == 2
+            ? "Wow!\nYou finally managed to come up with a password\nthat meets the minimum criteria for the reliability of our security system!\nIt took you just a little:"
+            : "Ура!\nВы наконец-то умудрились придумать пароль,\nудовлетворяющий минимальным критериям надёжности нашей системы безопастности!\nНа это вам потребовалось всего лишь навсего:";
         winMenu.transform.GetChild(0).transform.GetChild(1).GetComponent<TextMeshProUGUI>().faceColor = color;
         winMenu.transform.GetChild(0).transform.GetChild(2).GetComponent<Image>().sprite = buttonBackground[shift / 2];
+        winMenu.transform.GetChild(0).GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text =
+            langShift == 2 ? "Improve the result?" : "Улучшить результат?";
     }
 }

@@ -36,7 +36,7 @@ public class EngToRus : MonoBehaviour
         ruErrors.Add(8,"Должен содержать нашу капчу:");
         ruErrors.Add(9,"В пароле должно быть написано сегодняшнее число");
         ruErrors.Add(10, "Сколько здесь людей (ответ запишите цифровй)?");
-        ruErrors.Add(11, $"Введите слово \"{gameScript.ReverseWordGet}\", написанное наоборот");
+        ruErrors.Add(11, $"Введите слово \"{gameScript.NotReverseWordGet}\", написанное наоборот");
         ruErrors.Add(12,"Размер пароля должен быть больше 40 символов");
         ruErrors.Add(13,"Напишите слово 'Да', если вы согласны что этот пароль хороший");
         ruErrors.Add(14,"Для доказательства, что вы не робот - разгадайте загадку и запишите ответ в пароль\nЦифра эта без очков, состоит из двух крючков");
@@ -55,7 +55,7 @@ public class EngToRus : MonoBehaviour
         engErrors.Add(8,"The password must contain our captcha:");
         engErrors.Add(9,"Today's date should be written in the password.");
         engErrors.Add(10, "How many people are here (write down the answer with a number)?");
-        engErrors.Add(11, $"Enter word \"{gameScript.ReverseWordGet}\", written in reverse.");
+        engErrors.Add(11, $"Enter word \"{gameScript.NotReverseWordGet}\", written in reverse.");
         engErrors.Add(12,"The password size must be more than 40 characters.");
         engErrors.Add(13,"Write the word 'Yes' if you agree that this password is good.");
         engErrors.Add(14,"To prove that you are not a robot, solve the riddle and write answer in password\nThis figure is without glasses, consists of two hooks.");
